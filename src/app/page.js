@@ -3,7 +3,8 @@ import fs from "fs/promises";
 import path from "path";
 
 async function Home({}) {
-  let blogPosts = await getBlogPostList();
+  let blogPosts = await getBlogPostList("content");
+  let otherContent = await getBlogPostList("code-content");
 
   return (
     <div>
@@ -11,16 +12,20 @@ async function Home({}) {
       {blogPosts.map((post) => (
         <p key={post.slug}>{post.content}</p>
       ))}
+      <h1>Other Content</h1>
+      {otherContent.map((post) => (
+        <p key={post.slug}>{post.content}</p>
+      ))}
     </div>
   );
 }
 
-async function getBlogPostList() {
-  const fileNames = await readDirectory("/content");
+async function getBlogPostList(folder) {
+  const fileNames = await readDirectory(`/${folder}`);
   const blogPosts = [];
 
   for (let fileName of fileNames) {
-    const rawContent = await readFile(`/content/${fileName}`);
+    const rawContent = await readFile(`/${folder}/${fileName}`);
 
     blogPosts.push({
       slug: fileName.replace(".mdx", ""),
