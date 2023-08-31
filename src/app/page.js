@@ -1,103 +1,42 @@
 import Image from "next/image";
-import styles from "./page.module.css";
 import fs from "fs/promises";
 import path from "path";
 
-export default async function Home() {
-  const msg = await readFile(`/content/msg.txt`);
+async function Home({}) {
+  let blogPosts = await getBlogPostList();
 
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-      <p>{msg || "no message"}</p>
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <div>
+      <h1>Latest Content</h1>
+      {blogPosts.map((post) => (
+        <p key={post.slug}>{post.content}</p>
+      ))}
+    </div>
   );
+}
+
+async function getBlogPostList() {
+  const fileNames = await readDirectory("/content");
+  const blogPosts = [];
+
+  for (let fileName of fileNames) {
+    const rawContent = await readFile(`/content/${fileName}`);
+
+    blogPosts.push({
+      slug: fileName.replace(".mdx", ""),
+      content: rawContent,
+    });
+  }
+
+  return blogPosts;
+}
+
+function readDirectory(localPath) {
+  return fs.readdir(path.join(process.cwd(), localPath));
 }
 
 function readFile(localPath) {
   return fs.readFile(path.join(process.cwd(), localPath), "utf8");
 }
+
+export default Home;
