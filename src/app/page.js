@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import fs from "fs/promises";
 
 export default async function Home() {
   const msg = await fs.readFile("./msg.txt", "utf8");
