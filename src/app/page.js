@@ -29,7 +29,7 @@ export default async function Home() {
           </a>
         </div>
       </div>
-      <p>{msg}</p>
+      <p>{msg || "no message"}</p>
       <div className={styles.center}>
         <Image
           className={styles.logo}
