@@ -2,7 +2,7 @@
 const nextConfig = {
   experimental: {
     outputFileTracingIncludes: {
-      "/*": ["./src/msg.txt"],
+      "/*": ["./content/*"],
     },
   },
 };

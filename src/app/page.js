@@ -1,9 +1,10 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import fs from "fs/promises";
+import path from "path";
 
 export default async function Home() {
-  const msg = await fs.readFile("./msg.txt", "utf8");
+  const msg = await readFile(`/content/msg.txt`);
 
   return (
     <main className={styles.main}>
@@ -95,4 +96,8 @@ export default async function Home() {
       </div>
     </main>
   );
+}
+
+function readFile(localPath) {
+  return fs.readFile(path.join(process.cwd(), localPath), "utf8");
 }
