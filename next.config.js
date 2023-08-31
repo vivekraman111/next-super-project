@@ -1,10 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
+  output: "standalone",
   experimental: {
     outputFileTracingIncludes: {
       "/*": ["./content/**/*"],
     },
   },
 };
-
-module.exports = nextConfig;
