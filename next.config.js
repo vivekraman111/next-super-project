@@ -1,1 +1,9 @@
-module.exports = {};
+module.exports = {
+  output: "standalone",
+  experimental: {
+    outputFileTracingIncludes: {
+      "/*": ["./content/**/*"],
+      "/*": ["./code-content/**/*"],
+    },
+  },
+};
